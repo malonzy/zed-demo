@@ -61,7 +61,7 @@ function headerHTML(active) {
   <header class="site-header">
     <div class="container header-top">
       <button class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">${ICON.menu}</button>
-      <a class="brand" href="index.html" aria-label="Zed Multimedia home">
+      <a class="brand" href="/" aria-label="Zed Multimedia home">
         <img src="assets/zed-logo.png" alt="Zed Multimedia – New Vision" width="150" height="56">
       </a>
       <nav class="main-nav" aria-label="Primary">
@@ -81,15 +81,13 @@ function headerHTML(active) {
       <div class="radio-card">
         <img src="assets/zed-logo.png" alt="" width="100" height="37">
         <p class="radio-name">ZED 101.9 FM</p>
-        <div class="radio-controls">
-          <button class="play-btn" data-play aria-label="Play">${ICON.play}</button>
-          <input type="range" min="0" max="100" value="60" aria-label="Volume" data-volume>
-        </div>
-        <p class="radio-note">UI only. Playback is not wired in this prototype.</p>
+        <button class="open-player-btn" data-open-player>${ICON.play}<span>Listen live</span></button>
+        <p class="radio-note" data-radio-note aria-live="polite">Opens in a small window so it keeps playing while you browse.</p>
       </div>
     </div>
     <div class="ticker" aria-label="Market ticker">
       <div class="container ticker-track">
+        <span class="tick tick-weather" data-weather-tick>Weather…</span>
         ${ZED.TICKER.map((t) => `<span class="tick">${esc(t.name)} <strong>${t.value}</strong> <span class="${cls(t.change)}">${sign(t.change)}</span></span>`).join("")}
       </div>
     </div>
@@ -152,13 +150,96 @@ function wireRadio() {
     panel.toggleAttribute("hidden", !open);
     btn.setAttribute("aria-expanded", String(open));
   });
-  document.querySelector("[data-play]").addEventListener("click", (e) => {
-    const b = e.currentTarget;
-    const playing = b.dataset.on === "1";
-    b.dataset.on = playing ? "0" : "1";
-    b.setAttribute("aria-label", playing ? "Play" : "Pause");
-    b.innerHTML = playing ? ICON.play : ICON.pause;
+  // Playback lives in a pop-out window so it survives page navigation.
+  document.querySelector("[data-open-player]").addEventListener("click", () => {
+    const w = window.open("radio.html", "zed-radio", "popup,width=300,height=230");
+    if (w) w.focus();
+    else document.querySelector("[data-radio-note]").textContent = "Allow pop-ups to open the player.";
   });
+}
+
+/* ---------- Weather (Open-Meteo, no API key) ---------- */
+const WEATHER_CITIES = {
+  Accra: [5.56, -0.2], Kumasi: [6.69, -1.62], Takoradi: [4.9, -1.76], Tamale: [9.4, -0.84]
+};
+const WEATHER_TTL = 20 * 60 * 1000;
+
+/* WMO weather code -> [emoji, label] */
+function weatherInfo(code) {
+  if (code === 0) return ["☀️", "Clear"];
+  if (code <= 2) return ["⛅", "Partly cloudy"];
+  if (code === 3) return ["☁️", "Overcast"];
+  if (code <= 48) return ["🌫️", "Fog"];
+  if (code <= 57) return ["🌦️", "Drizzle"];
+  if (code <= 67) return ["🌧️", "Rain"];
+  if (code <= 77) return ["❄️", "Snow"];
+  if (code <= 82) return ["🌧️", "Showers"];
+  return ["⛈️", "Thunderstorm"];
+}
+
+function savedCity() {
+  try { const c = localStorage.getItem("zed-weather-city"); if (WEATHER_CITIES[c]) return c; } catch (e) {}
+  return "Accra";
+}
+
+async function fetchWeather(city) {
+  const key = `zed-weather-${city}`;
+  try {
+    const hit = JSON.parse(localStorage.getItem(key));
+    if (hit && Date.now() - hit.t < WEATHER_TTL) return hit.data;
+  } catch (e) {}
+  const [lat, lon] = WEATHER_CITIES[city];
+  const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}` +
+    `&current=temperature_2m,weather_code&daily=weather_code,temperature_2m_max,temperature_2m_min` +
+    `&timezone=auto&forecast_days=5`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error("weather " + res.status);
+  const data = await res.json();
+  try { localStorage.setItem(key, JSON.stringify({ t: Date.now(), data })); } catch (e) {}
+  return data;
+}
+
+async function wireWeather() {
+  const tick = document.querySelector("[data-weather-tick]");
+  const card = document.querySelector("[data-weather-card]");
+
+  const load = async (city) => {
+    try {
+      const w = await fetchWeather(city);
+      const [icon] = weatherInfo(w.current.weather_code);
+      tick.innerHTML = `${esc(city)} <strong>${Math.round(w.current.temperature_2m)}°C</strong> ${icon}`;
+      if (card) renderWeatherCard(card, city, w);
+    } catch (e) {
+      tick.hidden = true;
+      if (card) card.querySelector("[data-weather-body]").textContent = "Weather unavailable right now.";
+    }
+  };
+
+  if (card) {
+    const sel = card.querySelector("[data-weather-city]");
+    sel.innerHTML = Object.keys(WEATHER_CITIES).map((c) => `<option>${c}</option>`).join("");
+    sel.value = savedCity();
+    sel.addEventListener("change", () => {
+      try { localStorage.setItem("zed-weather-city", sel.value); } catch (e) {}
+      load(sel.value);
+    });
+  }
+  load(savedCity());
+}
+
+function renderWeatherCard(card, city, w) {
+  const [icon, label] = weatherInfo(w.current.weather_code);
+  const day = (iso) => new Date(iso + "T12:00").toLocaleDateString("en-GB", { weekday: "short" });
+  card.querySelector("[data-weather-body]").innerHTML = `
+    <div class="weather-now">
+      <span class="weather-icon">${icon}</span>
+      <div><strong>${Math.round(w.current.temperature_2m)}°C</strong><span>${label}</span></div>
+    </div>
+    <ul class="weather-days">
+      ${w.daily.time.slice(1, 5).map((d, i) => `
+        <li><span>${day(d)}</span><span>${weatherInfo(w.daily.weather_code[i + 1])[0]}</span>
+        <span>${Math.round(w.daily.temperature_2m_max[i + 1])}° / ${Math.round(w.daily.temperature_2m_min[i + 1])}°</span></li>`).join("")}
+    </ul>`;
 }
 
 /* Mock search: filters the prototype's posts by title and excerpt. */
@@ -210,6 +291,7 @@ function mountLayout(active) {
   document.getElementById("site-header").outerHTML = headerHTML(active);
   document.getElementById("site-footer").outerHTML = footerHTML();
   wireRadio();
+  wireWeather();
   wireSearch();
   wireNewsletter();
 }

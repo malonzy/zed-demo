@@ -28,6 +28,13 @@
   <!-- Stories + stocks -->
   <section class="stories-grid">
     <div class="stocks-panel">
+      <section class="weather-card" data-weather-card aria-label="Weather">
+        <div class="weather-head">
+          <h3 class="eyebrow">Weather</h3>
+          <select data-weather-city aria-label="City"></select>
+        </div>
+        <div data-weather-body>Loading…</div>
+      </section>
       <h3 class="eyebrow">Stocks</h3>
       <table class="stocks-table">
         <thead><tr><th>Symbol</th><th>Price</th><th>Change</th></tr></thead>
