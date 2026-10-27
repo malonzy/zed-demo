@@ -11,6 +11,8 @@ const ICON = {
   tv: LUCIDE('<path d="m17 2-5 5-5-5"/><rect width="20" height="15" x="2" y="7" rx="2"/>', 18),
   radio: LUCIDE('<path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/>', 18),
   play: LUCIDE('<path d="M5 5a2 2 0 0 1 3.008-1.728l11.997 6.998a2 2 0 0 1 .003 3.458l-12 7A2 2 0 0 1 5 19z"/>', 16),
+  sun: LUCIDE('<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>', 18).replace('class="icon"', 'class="icon icon-sun"'),
+  moon: LUCIDE('<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"/>', 18).replace('class="icon"', 'class="icon icon-moon"'),
   pause: LUCIDE('<rect x="14" y="3" width="5" height="18" rx="1"/><rect x="5" y="3" width="5" height="18" rx="1"/>', 16)
 };
 
@@ -73,7 +75,8 @@ function headerHTML(active) {
           <button type="submit" aria-label="Search">${ICON.search}</button>
           <div class="search-results" data-search-results hidden></div>
         </form>
-        <button class="live-chip" data-live-tv aria-label="Live TV" title="Live TV">${ICON.tv}<span class="live-label">Live TV</span></button>
+        <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode" title="Toggle dark mode">${ICON.moon}${ICON.sun}</button>
+        <button class="live-chip" data-live-tvaria-label="Live TV" title="Live TV">${ICON.tv}<span class="live-label">Live TV</span></button>
         <button class="live-chip" data-radio-toggle aria-expanded="false" aria-label="Live Radio" title="Live Radio">${ICON.radio}<span class="live-label">Live Radio</span></button>
       </div>
     </div>
@@ -290,6 +293,7 @@ function wireNewsletter() {
 function mountLayout(active) {
   document.getElementById("site-header").outerHTML = headerHTML(active);
   document.getElementById("site-footer").outerHTML = footerHTML();
+  document.querySelector("[data-theme-toggle]").addEventListener("click", () => window.toggleTheme());
   wireRadio();
   wireWeather();
   wireSearch();
