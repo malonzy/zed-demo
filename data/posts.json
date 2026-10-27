@@ -1,0 +1,105 @@
+{
+  "_note": "Real headlines and image URLs from zedmultimedia.com (WordPress REST API). Dates are mock, shifted to October 2026 for the prototype. Attribution kept per item.",
+  "source": "https://zedmultimedia.com/wp-json/wp/v2/posts",
+  "posts": [
+    {
+      "id": 48959,
+      "category": "Entertainment",
+      "title": "Veteran Ghanaian actress Grace Nortey dies at 89",
+      "slug": "veteran-ghanaian-actress-grace-nortey-dies-at-89",
+      "mockDate": "2026-10-22T08:00:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/Veteran-Ghanaian-actress-Grace-Nortey.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/27/veteran-ghanaian-actress-grace-nortey-dies-at-89/"
+    },
+    {
+      "id": 48957,
+      "category": "Business",
+      "title": "GoldBod should be judged by strategic objectives – Analyst",
+      "slug": "goldbod-should-be-judged-by-strategic-objectives-analyst",
+      "mockDate": "2026-10-22T07:15:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/02/Financial-Analyst-John-Kyei.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/goldbod-should-be-judged-by-strategic-objectives-analyst/"
+    },
+    {
+      "id": 48955,
+      "category": "Business",
+      "title": "IMF urges GOLDBOD to rethink gold programme financing",
+      "slug": "imf-urges-goldbod-to-rethink-gold-programme-financing",
+      "mockDate": "2026-10-22T06:40:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/02/IMF-Building-2.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/imf-urges-goldbod-to-rethink-gold-programme-financing/"
+    },
+    {
+      "id": 48952,
+      "category": "Sports",
+      "title": "UCC Beats GCTU in TBSC 2026 National Semi-Finals",
+      "slug": "ucc-beats-gctu-in-tbsc-2026-national-semi-finals",
+      "mockDate": "2026-10-22T05:55:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/TBSC.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/ucc-beats-gctu-in-tbsc-2026-national-semi-finals/"
+    },
+    {
+      "id": 48950,
+      "category": "Business",
+      "title": "Investors Earned GH¢37bn in Dividends, Nearly GH¢800m in Bond Coupons",
+      "slug": "investors-earned-gh37bn-in-dividends",
+      "mockDate": "2026-10-22T05:10:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/Managing-Director-of-the-Ghana-Stock-Exchange-GSE-Abena-Amoah.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/investors-earned-gh%c2%a237bn-in-dividends-nearly-gh%c2%a2800m-in-bond-coupons/"
+    },
+    {
+      "id": 48948,
+      "category": "Business",
+      "title": "Finance Minister Calls for Shift from Raw Exports to Value-Added Trade with China",
+      "slug": "finance-minister-calls-for-shift-from-raw-exports-to-value-added-trade-with-china",
+      "mockDate": "2026-10-22T04:30:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/Finance-Minister-Calls-for-Shift-from-Raw-Exports-to-Value-Added-Trade-with-China.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/finance-minister-calls-for-shift-from-raw-exports-to-value-added-trade-with-china/"
+    },
+    {
+      "id": 48946,
+      "category": "Business",
+      "title": "PETROSOL Lists GH¢200m Note Programme on GSE",
+      "slug": "petrosol-lists-gh200m-note-programme-on-gse",
+      "mockDate": "2026-10-22T03:45:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/PETROSOL-Fuel-Filling-Station.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/petrosol-lists-gh%c2%a2200m-note-programme-on-gse/"
+    },
+    {
+      "id": 48940,
+      "category": "Politics",
+      "title": "OSP Receives Three Petitions over Afenyo-Markin Extortion Allegations",
+      "slug": "osp-receives-three-petitions-over-afenyo-markin-extortion-allegations",
+      "mockDate": "2026-10-21T18:20:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/Special-Prosecutor-Kissi-Agyebeng1.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/25/osp-receives-three-petitions-over-afenyo-markin-extortion-allegations/"
+    },
+    {
+      "id": 48937,
+      "category": "Lifestyle",
+      "title": "Mövenpick Ambassador Hotel Eyes Wider Community Reach as It Marks 15 Years",
+      "slug": "movenpick-ambassador-hotel-eyes-wider-community-reach-as-it-marks-15-years",
+      "mockDate": "2026-10-21T16:05:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/08/General-Manager-of-the-Movenpick-Ambassador-Hotel-Accra-Isaac-Okpoti-Adjei.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/17/movenpick-ambassador-hotel-eyes-wider-community-reach-as-it-marks-15-years/"
+    },
+    {
+      "id": 48935,
+      "category": "Politics",
+      "title": "Vice President Urges Civil Servants to Renew Commitment to Excellence",
+      "slug": "vice-president-urges-civil-servants-to-renew-commitment-to-excellence",
+      "mockDate": "2026-10-21T14:50:00Z",
+      "image": "https://zedmultimedia.com/wp-content/uploads/2026/02/Vice-President-Jane-Naana-Opoku-Agyemang.jpg",
+      "sourceLink": "https://zedmultimedia.com/2026/08/17/vice-president-urges-civil-servants-to-renew-commitment-to-excellence/"
+    }
+  ],
+  "categories": [
+    { "name": "News", "slug": "tie-news", "count": 8701 },
+    { "name": "Business", "slug": "tie-business", "count": 2327 },
+    { "name": "Politics", "slug": "tie-politics", "count": 290 },
+    { "name": "Sports", "slug": "tie-sports", "count": 2173 },
+    { "name": "Entertainment", "slug": "tie-entertainment", "count": 1298 },
+    { "name": "Lifestyle", "slug": "tie-life-style", "count": 151 },
+    { "name": "Technology", "slug": "tie-tech", "count": 61 }
+  ]
+}
