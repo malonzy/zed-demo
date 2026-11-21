@@ -6,10 +6,13 @@
   const slugParam = params.get("c") || "politics";
   const query = (params.get("q") || "").trim();
   const isSearch = slugParam === "search";
-  const slug = isSearch ? "news" : (ZED.CATS[slugParam] ? slugParam : "politics");
+  /* Old section links (sports, entertainment, tourism) open Leisure on the matching tab */
+  const ALIAS = { sports: ["leisure", 0], entertainment: ["leisure", 1], tourism: ["leisure", 2] };
+  const [aliasSlug, aliasTab] = ALIAS[slugParam] || [];
+  const slug = isSearch ? "news" : (ZED.CATS[aliasSlug || slugParam] ? (aliasSlug || slugParam) : "politics");
   const cfg = ZED.CATS[slug];
   const root = document.getElementById("cat-root");
-  let tab = 0;
+  let tab = aliasTab || 0;
 
   mountLayout(isSearch ? "" : slug);
   document.title = (isSearch ? `Search: ${query}` : cfg.name) + " – Zed Multimedia";
@@ -41,7 +44,7 @@
         ? `<div class="grid-4">${results.map((p) => card(p)).join("")}</div>`
         : `<div class="empty">
              <p>Nothing matched “${esc(query)}”. Try a person, place or topic, or browse a section.</p>
-             <p class="empty-links">${["politics", "business", "sports", "entertainment"].map((s) => `<a href="${catUrl(s)}">${ZED.CATS[s].name}</a>`).join("")}</p>
+             <p class="empty-links">${["news", "politics", "business", "leisure"].map((s) => `<a href="${catUrl(s)}">${ZED.CATS[s].name}</a>`).join("")}</p>
            </div>`}
       ${videoRow()}`;
   }
@@ -62,8 +65,10 @@
   function render() {
     if (isSearch) return renderSearch();
 
-    const base = ZED.BY_CAT[slug];
-    const list = rotate(base, (tab * 2) % base.length);
+    /* Leisure shows a different list per tab; other sections just reshuffle */
+    const list = cfg.tabLists
+      ? ZED.BY_CAT[cfg.tabLists[tab]]
+      : rotate(ZED.BY_CAT[slug], (tab * 2) % ZED.BY_CAT[slug].length);
     const [lead, second] = list;
     const grid = list.slice(2, 8);
     const mostRead = pick(list, [3, 7, 1, 5, 9]);

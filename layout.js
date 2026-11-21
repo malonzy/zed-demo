@@ -7,6 +7,12 @@ const LUCIDE = (children, size = 20) =>
 
 const ICON = {
   menu: LUCIDE('<path d="M4 5h16"/><path d="M4 12h16"/><path d="M4 19h16"/>', 22),
+  facebook: LUCIDE('<path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>', 18),
+  twitter: LUCIDE('<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>', 18),
+  linkedin: LUCIDE('<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>', 18),
+  instagram: LUCIDE('<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>', 18),
+  youtube: LUCIDE('<path d="M2.5 17a24.12 24.12 0 0 1 0-10 2 2 0 0 1 1.4-1.4 49.56 49.56 0 0 1 16.2 0A2 2 0 0 1 21.5 7a24.12 24.12 0 0 1 0 10 2 2 0 0 1-1.4 1.4 49.55 49.55 0 0 1-16.2 0A2 2 0 0 1 2.5 17"/><path d="m10 15 5-3-5-3z"/>', 18),
+  tiktok: LUCIDE('<path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/>', 18), /* not in Lucide: drawn in the same style */
   search: LUCIDE('<path d="m21 21-4.34-4.34"/><circle cx="11" cy="11" r="8"/>', 18),
   tv: LUCIDE('<path d="m17 2-5 5-5-5"/><rect width="20" height="15" x="2" y="7" rx="2"/>', 18),
   radio: LUCIDE('<path d="M16.247 7.761a6 6 0 0 1 0 8.478"/><path d="M19.075 4.933a10 10 0 0 1 0 14.134"/><path d="M4.925 19.067a10 10 0 0 1 0-14.134"/><path d="M7.753 16.239a6 6 0 0 1 0-8.478"/><circle cx="12" cy="12" r="2"/>', 18),
@@ -44,6 +50,43 @@ const adBlock = (variant = "tall") => {
       <span class="ad-cta">Enquire now</span>
     </div>`;
   }
+  if (variant === "video") {
+    // Placeholder for a video ad, or a video that complements the article.
+    // Swap .ad-video-frame's contents for a <video> or an <iframe> embed.
+    return `<div class="ad ad-video" role="complementary" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-video-frame">
+        <button class="ad-video-play" type="button" aria-label="Play video">${ICON.play}</button>
+        <span class="ad-video-time">0:30</span>
+      </div>
+      <div class="ad-copy">
+        <strong>Own a piece of paradise</strong>
+        <span>2, 3 &amp; 4 bedroom homes. Watch the tour and book a viewing today.</span>
+        <span class="ad-cta">Enquire now</span>
+      </div>
+    </div>`;
+  }
+  if (variant === "leaderboard") {
+    return `<div class="ad ad-leaderboard" role="complementary" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-copy"><strong>Advertise on Zed Multimedia</strong><span>Put your brand in front of Ghana’s readers, listeners and viewers</span></div>
+      <span class="ad-cta">Get in touch</span>
+    </div>`;
+  }
+  if (variant === "house") {
+    return `<div class="ad ad-square ad-house" role="complementary" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-copy"><strong>Listen live on ZED 101.9 FM</strong><span>News, music and talk, all day</span></div>
+      <span class="ad-cta">Tune in</span>
+    </div>`;
+  }
+  if (variant === "generic") {
+    return `<div class="ad ad-square ad-generic" role="complementary" aria-label="Advertisement">
+      <span class="ad-label">Advertisement</span>
+      <div class="ad-copy"><strong>Your brand could be here</strong><span>Reach Ghana’s readers every day</span></div>
+      <span class="ad-cta">Advertise with us</span>
+    </div>`;
+  }
   return `<div class="ad ad-tall" role="complementary" aria-label="Advertisement">
     <span class="ad-label">Advertisement</span>
     <svg class="ad-art" viewBox="0 0 200 120" aria-hidden="true"><rect x="0" y="86" width="200" height="34" fill="#12346b"/><rect x="30" y="44" width="38" height="38" rx="2" fill="#ff7a1a"/><rect x="72" y="44" width="38" height="38" rx="2" fill="#2fa3d8"/><rect x="114" y="44" width="38" height="38" rx="2" fill="#e8e8e8"/><rect x="50" y="60" width="38" height="38" rx="2" fill="#4B0083" opacity=".9"/></svg>
@@ -52,20 +95,44 @@ const adBlock = (variant = "tall") => {
   </div>`;
 };
 
+/* Long right-hand strip: a mix of Zed's own promos and generic placeholders */
+const RAIL_ADS = [
+  // short: true makes a 300x250 block; otherwise a 300x600 half-page
+  { own: true,  title: "Listen live on ZED 101.9 FM", sub: "News, music and talk, all day", cta: "Tune in" },
+  { own: false, short: true, title: "Fast, reliable mobile data", sub: "Stay connected anywhere in Ghana", cta: "Learn more" },
+  { own: false, variant: "tall" },
+  { own: true,  short: true, title: "Watch ZED TV live", sub: "Streaming now on YouTube", cta: "Watch" },
+  { own: false, short: true, title: "Your brand could be here", sub: "Reach Ghana’s readers every day", cta: "Advertise with us" },
+  { own: true,  short: true, title: "Get the Zed newsletter", sub: "The day’s top stories in your inbox", cta: "Subscribe" },
+];
+const adRail = () => RAIL_ADS.map((a) => a.variant
+  ? adBlock(a.variant)
+  : `<div class="ad ad-square ${a.own ? "ad-house" : "ad-generic"}${a.short ? " ad-short" : ""}" role="complementary" aria-label="${a.own ? "From Zed Multimedia" : "Advertisement"}">
+      <span class="ad-label">${a.own ? "From Zed" : "Advertisement"}</span>
+      <div class="ad-copy"><strong>${a.title}</strong><span>${a.sub}</span></div>
+      <span class="ad-cta">${a.cta}</span>
+    </div>`).join("");
+
 /* ---------- Header ---------- */
 const NAV = [
-  ["home", "Home"], ["news", "News"], ["business", "Business"], ["politics", "Politics"],
-  ["lifestyle", "Lifestyle"], ["sports", "Sports"], ["entertainment", "Entertainment"], ["technology", "Technology"]
+  ["home", "Home"], ["news", "News"], ["business", "Business"], ["lifestyle", "Lifestyle"],
+  ["leisure", "Leisure"], ["politics", "Politics"], ["technology", "Technology"]
 ];
+/* Sub-sections that live under a menu item (so their stories highlight the right tab) */
+const NAV_ALIAS = { sports: "leisure", entertainment: "leisure", tourism: "leisure" };
 
 function headerHTML(active) {
+  active = NAV_ALIAS[active] || active;
   return `
   <header class="site-header">
-    <div class="container header-top">
-      <button class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">${ICON.menu}</button>
+    <div class="header-brand-row">
       <a class="brand" href="/" aria-label="Zed Multimedia home">
         <img src="assets/zed-logo.png" alt="Zed Multimedia – New Vision" width="150" height="56">
       </a>
+      ${adBlock("leaderboard")}
+    </div>
+    <div class="container header-top header-nav-row">
+      <button class="icon-btn menu-toggle" aria-label="Open menu" aria-expanded="false">${ICON.menu}</button>
       <nav class="main-nav" aria-label="Primary">
         ${NAV.map(([slug, label]) => `<a href="${catUrl(slug)}"${slug === active ? ' class="is-active" aria-current="page"' : ""}>${label}</a>`).join("")}
       </nav>
@@ -76,11 +143,10 @@ function headerHTML(active) {
           <div class="search-results" data-search-results hidden></div>
         </form>
         <button class="theme-toggle" data-theme-toggle aria-label="Toggle dark mode" title="Toggle dark mode">${ICON.moon}${ICON.sun}</button>
-        <button class="live-chip" data-live-tvaria-label="Live TV" title="Live TV">${ICON.tv}<span class="live-label">Live TV</span></button>
+        <button class="live-chip" data-live-tv aria-label="Live TV" title="Live TV">${ICON.tv}<span class="live-dot" aria-hidden="true" hidden></span><span class="live-label">Live TV</span></button>
         <button class="live-chip" data-radio-toggle aria-expanded="false" aria-label="Live Radio" title="Live Radio">${ICON.radio}<span class="live-label">Live Radio</span></button>
       </div>
-    </div>
-    <div class="radio-panel" hidden data-radio-panel>
+      <div class="radio-panel" hidden data-radio-panel>
       <div class="radio-card">
         <img src="assets/zed-logo.png" alt="" width="100" height="37">
         <p class="radio-name">ZED 101.9 FM</p>
@@ -88,10 +154,11 @@ function headerHTML(active) {
         <p class="radio-note" data-radio-note aria-live="polite">Opens in a small window so it keeps playing while you browse.</p>
       </div>
     </div>
+    </div>
     <div class="ticker" aria-label="Market ticker">
       <div class="container ticker-track">
         <span class="tick tick-weather" data-weather-tick>Weather…</span>
-        ${ZED.TICKER.map((t) => `<span class="tick">${esc(t.name)} <strong>${t.value}</strong> <span class="${cls(t.change)}">${sign(t.change)}</span></span>`).join("")}
+        ${ZED.TICKER.map((t, i) => `<span class="tick tick-market" tabindex="0" data-tick="${i}">${esc(t.name)} <strong>${t.value}</strong> <span class="${cls(t.change)}">${sign(t.change)}</span></span>`).join("")}
       </div>
     </div>
   </header>`;
@@ -104,12 +171,12 @@ function footerHTML() {
     <div class="container footer-logo-row">
       <img src="assets/zed-logo.png" alt="Zed Multimedia" width="140" height="52">
       <div class="social">
-        <a href="https://web.facebook.com/zedfmgh" aria-label="Facebook">f</a>
-        <a href="https://twitter.com/zedfmgh" aria-label="X">X</a>
-        <a href="https://www.linkedin.com/company/zedmultimedia" aria-label="LinkedIn">in</a>
-        <a href="https://www.instagram.com/zedfmgh/" aria-label="Instagram">ig</a>
-        <a href="https://youtube.com/@zedtvgh" aria-label="YouTube">yt</a>
-        <a href="https://www.tiktok.com/@zedmultimedia" aria-label="TikTok">tt</a>
+        <a href="https://web.facebook.com/zedfmgh" aria-label="Facebook">${ICON.facebook}</a>
+        <a href="https://twitter.com/zedfmgh" aria-label="X (Twitter)">${ICON.twitter}</a>
+        <a href="https://www.linkedin.com/company/zedmultimedia" aria-label="LinkedIn">${ICON.linkedin}</a>
+        <a href="https://www.instagram.com/zedfmgh/" aria-label="Instagram">${ICON.instagram}</a>
+        <a href="https://youtube.com/@zedtvgh" aria-label="YouTube">${ICON.youtube}</a>
+        <a href="https://www.tiktok.com/@zedmultimedia" aria-label="TikTok">${ICON.tiktok}</a>
       </div>
     </div>
     <div class="container footer-grid">
@@ -121,7 +188,7 @@ function footerHTML() {
         <li><a href="#">Partners</a></li>
       </ul>
       <ul>
-        ${["politics", "business", "sports", "technology", "lifestyle", "entertainment"].map((s) => `<li><a href="${catUrl(s)}">${ZED.CATS[s].name}</a></li>`).join("")}
+        ${["politics", "business", "leisure", "technology", "lifestyle"].map((s) => `<li><a href="${catUrl(s)}">${ZED.CATS[s].name}</a></li>`).join("")}
       </ul>
       <div class="newsletter">
         <h4>Subscribe to our newsletter</h4>
@@ -158,6 +225,106 @@ function wireRadio() {
     const w = window.open("radio.html", "zed-radio", "popup,width=300,height=230");
     if (w) w.focus();
     else document.querySelector("[data-radio-note]").textContent = "Allow pop-ups to open the player.";
+  });
+}
+
+/* ---------- Market bar: hover/focus a chip to expand it into a detail card ---------- */
+/* Prototype data: open/high/low and the trend line are derived from the mock value, not a live feed. */
+function tickerDetail(t) {
+  const num = (s) => parseFloat(String(s).replace(/,/g, ""));
+  const decimals = (String(t.value).split(".")[1] || "").length;
+  const fmt = (n) => (t.unit === "$" ? "$" : "") + n.toLocaleString("en-US", { minimumFractionDigits: decimals, maximumFractionDigits: decimals }) + (t.unit === "%" ? "%" : "");
+  const v = num(t.value), prev = v / (1 + t.change / 100);
+  // Deterministic wiggle (seeded by the name) that ends at the current value.
+  let seed = [...t.name].reduce((a, c) => a + c.charCodeAt(0), 7);
+  const rnd = () => ((seed = (seed * 9301 + 49297) % 233280) / 233280);
+  const span = Math.abs(v - prev) * 1.5 + v * 0.002;
+  const pts = Array.from({ length: 24 }, (_, i) => prev + (v - prev) * (i / 23) + (rnd() - 0.5) * span);
+  pts[0] = prev; pts[23] = v;
+  const hi = Math.max(...pts), lo = Math.min(...pts);
+  const [w0, w1] = t.wk52;
+  const pos = Math.min(100, Math.max(0, ((v - w0) / (w1 - w0)) * 100));
+  const W = 220, H = 46, x = (i) => (i / 23) * W, y = (p) => H - 4 - ((p - lo) / (hi - lo || 1)) * (H - 8);
+  const line = pts.map((p, i) => `${i ? "L" : "M"}${x(i).toFixed(1)} ${y(p).toFixed(1)}`).join("");
+  return `
+    <div class="tc-head"><strong>${esc(t.name)}</strong><span class="tc-val">${t.value}</span><span class="${cls(t.change)}">${sign(t.change)}</span></div>
+    <p class="tc-desc">${esc(t.desc)}</p>
+    <svg class="tc-spark ${cls(t.change)}" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" aria-hidden="true"><path d="${line}" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></svg>
+    <dl class="tc-grid">
+      <div><dt>Prev. close</dt><dd>${fmt(prev)}</dd></div>
+      <div><dt>Open</dt><dd>${fmt(pts[1])}</dd></div>
+      <div><dt>Day high</dt><dd>${fmt(hi)}</dd></div>
+      <div><dt>Day low</dt><dd>${fmt(lo)}</dd></div>
+    </dl>
+    <div class="tc-range"><span>52-week range</span>
+      <div class="tc-bar"><i style="left:${pos.toFixed(1)}%"></i></div>
+      <div class="tc-ends"><span>${fmt(w0)}</span><span>${fmt(w1)}</span></div></div>
+    <p class="tc-note">Sample data for the prototype.</p>`;
+}
+
+function wireTicker() {
+  const card = document.createElement("div");
+  card.className = "tick-card";
+  card.setAttribute("role", "tooltip");
+  card.hidden = true;
+  document.body.appendChild(card);
+  let hideTimer;
+  const show = (el) => {
+    clearTimeout(hideTimer);
+    card.innerHTML = tickerDetail(ZED.TICKER[+el.dataset.tick]);
+    card.hidden = false;
+    const r = el.getBoundingClientRect();
+    const w = card.offsetWidth;
+    card.style.top = r.top + "px";
+    card.style.left = Math.max(8, Math.min(r.left, window.innerWidth - w - 8)) + "px";
+    card.style.minWidth = r.width + "px";
+    requestAnimationFrame(() => card.classList.add("is-open"));
+    document.querySelectorAll(".tick-market.is-expanded").forEach((n) => n.classList.remove("is-expanded"));
+    el.classList.add("is-expanded");
+    el.setAttribute("aria-describedby", "tick-card");
+  };
+  const hide = () => {
+    hideTimer = setTimeout(() => {
+      card.classList.remove("is-open");
+      card.hidden = true;
+      document.querySelectorAll(".tick-market.is-expanded").forEach((n) => n.classList.remove("is-expanded"));
+    }, 80);
+  };
+  card.id = "tick-card";
+  document.querySelectorAll(".tick-market").forEach((el) => {
+    el.addEventListener("mouseenter", () => show(el));
+    el.addEventListener("focus", () => show(el));
+    el.addEventListener("mouseleave", hide);
+    el.addEventListener("blur", hide);
+  });
+  card.addEventListener("mouseenter", () => clearTimeout(hideTimer));
+  card.addEventListener("mouseleave", hide);
+  window.addEventListener("scroll", () => { card.hidden = true; card.classList.remove("is-open"); }, { passive: true });
+}
+
+/* ---------- Live TV (YouTube, checked by the server) ---------- */
+function wireTv() {
+  const btn = document.querySelector("[data-live-tv]");
+  if (!btn) return;
+  const dot = btn.querySelector(".live-dot");
+  const set = (live) => {
+    dot.hidden = !live;
+    btn.classList.toggle("is-live", live);
+    const label = live ? "Live TV – on air now" : "Live TV";
+    btn.setAttribute("aria-label", label);
+    btn.title = label;
+  };
+  const poll = () =>
+    fetch("/api/tv-status", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : { live: false }))
+      .then((d) => set(!!d.live))
+      .catch(() => set(false));
+  poll();
+  setInterval(poll, 60 * 1000);
+  btn.addEventListener("click", () => {
+    const w = window.open("tv.html", "zed-tv", "popup,width=960,height=600");
+    if (w) w.focus();
+    else window.location.href = "tv.html";
   });
 }
 
@@ -295,6 +462,8 @@ function mountLayout(active) {
   document.getElementById("site-footer").outerHTML = footerHTML();
   document.querySelector("[data-theme-toggle]").addEventListener("click", () => window.toggleTheme());
   wireRadio();
+  wireTv();
+  wireTicker();
   wireWeather();
   wireSearch();
   wireNewsletter();

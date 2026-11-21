@@ -139,6 +139,12 @@ window.ZED = (function () {
     { id: "29576", title: "Fitness coach links morning exercise to workplace productivity", image: "https://zedmultimedia.com/wp-content/uploads/2025/06/Victor-Konu_Fitness-Coach_700x500.jpg", excerpt: "Fitness coach Victor Konu has emphasized the connection between regular physical activity and productivity.", link: "https://zedmultimedia.com/2025/06/16/fitness-coach-links-morning-exercise-to-workplace-productivity/" }
   ], 200);
 
+  const tourism = mk("Tourism", "tourism", [
+    { id: "15000", title: "GACL welcomes Virgin Atlantic’s return", image: "https://zedmultimedia.com/wp-content/uploads/2024/09/GACL-Welcomes-VIRGIN.jpg", excerpt: "Ghana Airports Company Limited has welcomed Virgin Atlantic’s decision to resume operations in Ghana from May 2025, with daily Boeing 787 flights.", link: "https://zedmultimedia.com/2024/09/04/gacl-welcomes-virgin-atlantics-return/" },
+    { id: "15005", title: "Ethiopian Airlines to launch direct Accra-Toronto flight 2025", image: "https://zedmultimedia.com/wp-content/uploads/2024/09/VIRGIN-PHOTO.jpg", excerpt: "Ghana Airports Company Limited says Ethiopian Airlines will launch a direct Accra to Toronto flight in the first quarter of 2025.", link: "https://zedmultimedia.com/2024/09/04/ethiopian-airlines-to-launch-direct-accra-toronto-flight-2025/" },
+    { id: "2057", title: "Emirates offers students great travel deals", image: "https://zedmultimedia.com/wp-content/uploads/2023/08/EMIRA.jpg", excerpt: "Emirates is offering Ghanaian students and young travellers special fares and privileges across its network of over 130 destinations.", link: "https://zedmultimedia.com/2023/08/17/emirates-offers-students-great-travel-deals/" }
+  ], 240);
+
   const tech = mk("Technology", "technology", [
     { id: "32358", title: "Google taps nuclear power to fuel AI boom in Oak Ridge move", image: "https://zedmultimedia.com/wp-content/uploads/2025/08/Google-building_700x500.jpg", excerpt: "Google, with Kairos Power, has selected Oak Ridge, Tennessee, as the site for an advanced small modular nuclear reactor.", link: "https://zedmultimedia.com/2025/08/19/google-taps-nuclear-power-to-fuel-ai-boom-in-oak-ridge-move/" },
     { id: "31932", title: "Perplexity AI makes $34.5bn bid for Google Chrome", image: "https://zedmultimedia.com/wp-content/uploads/2025/08/Perplexity-AI_700x400.jpg", excerpt: "AI startup Perplexity has made an unsolicited USD34.5 billion offer to acquire Google’s Chrome browser.", link: "https://zedmultimedia.com/2025/08/13/perplexity-ai-makes-34-5bn-bid-for-google-chrome/" },
@@ -162,8 +168,12 @@ window.ZED = (function () {
     sports: sports.slice(0, 12),
     entertainment: [...homeBy("entertainment"), ...entertainmentFetched].slice(0, 12),
     lifestyle: [...homeBy("lifestyle"), ...lifestyleFetched].slice(0, 12),
-    technology: tech.slice(0, 12)
+    technology: tech.slice(0, 12),
+    tourism
   };
+  /* Leisure = Sports + Entertainment + Tourism, interleaved newest first */
+  BY_CAT.leisure = [...BY_CAT.sports, ...BY_CAT.entertainment, ...BY_CAT.tourism]
+    .sort((a, b) => a.minsAgo - b.minsAgo).slice(0, 12);
   /* News = a mix of everything, newest first by mock age */
   const pool = [...HOME, ENERGY, ...businessFetched.slice(0, 3), ...sports.slice(0, 3), ...entertainmentFetched.slice(0, 2), ...tech.slice(0, 2)];
   BY_CAT.news = pool.sort((a, b) => a.minsAgo - b.minsAgo).slice(0, 12);
@@ -173,15 +183,15 @@ window.ZED = (function () {
     business: { name: "Business", tabs: ["Economy", "Markets", "Companies", "Africa"] },
     politics: { name: "Politics", tabs: ["Ghana", "Africa", "North America", "Europe"] },
     lifestyle: { name: "Lifestyle", tabs: ["Health", "Family", "Wellness"] },
-    sports: { name: "Sports", tabs: ["Football", "Athletics", "Boxing", "Basketball"] },
-    entertainment: { name: "Entertainment", tabs: ["Music", "Film & TV", "Celebrity"] },
+    /* Leisure has a tab per sub-section; tabLists names the BY_CAT list behind each tab */
+    leisure: { name: "Leisure", tabs: ["Sports", "Entertainment", "Tourism"], tabLists: ["sports", "entertainment", "tourism"] },
     technology: { name: "Technology", tabs: ["AI", "Telecom", "Cybersecurity", "Startups"] }
   };
 
   /* ---------- Everything, de-duplicated (used by search and article lookup) ---------- */
   const seen = new Set();
   const ALL = [];
-  [...HOME, ENERGY, ...businessFetched, ...politicsFetched, ...sports, ...entertainmentFetched, ...lifestyleFetched, ...tech].forEach((p) => {
+  [...HOME, ENERGY, ...businessFetched, ...politicsFetched, ...sports, ...entertainmentFetched, ...lifestyleFetched, ...tourism, ...tech].forEach((p) => {
     if (!seen.has(p.id)) { seen.add(p.id); ALL.push(p); }
   });
 
@@ -288,12 +298,12 @@ window.ZED = (function () {
 
   /* ---------- Mock markets ---------- */
   const TICKER = [
-    { name: "S&P 500", value: "5,806.35", change: 0.15 },
-    { name: "Nasdaq", value: "18,385.60", change: 0.60 },
-    { name: "US 10 Yr", value: "4.19", change: 0.47 },
-    { name: "FTSE 100", value: "8,269.38", change: 0.13 },
-    { name: "Crude Oil", value: "70.08", change: -0.98 },
-    { name: "Gold", value: "2,748.00", change: 0.68 }
+    { name: "S&P 500", value: "5,806.35", change: 0.15, desc: "Index of 500 large companies listed on US exchanges, a broad gauge of the US stock market.", wk52: [4835.04, 6000.36] },
+    { name: "Nasdaq", value: "18,385.60", change: 0.60, desc: "Nasdaq Composite: over 3,000 stocks, heavily weighted toward technology companies.", wk52: [14510.30, 18647.45] },
+    { name: "US 10 Yr", value: "4.19", change: 0.47, desc: "Yield on 10-year US Treasury notes, a benchmark for global borrowing costs.", unit: "%", wk52: [3.62, 4.74] },
+    { name: "FTSE 100", value: "8,269.38", change: 0.13, desc: "The 100 largest companies listed on the London Stock Exchange.", wk52: [7215.18, 8474.41] },
+    { name: "Crude Oil", value: "70.08", change: -0.98, desc: "Price per barrel of WTI crude oil, a key driver of fuel costs and Ghana’s export earnings.", unit: "$", wk52: [65.27, 87.67] },
+    { name: "Gold", value: "2,748.00", change: 0.68, desc: "Spot gold per troy ounce, widely held as a safe-haven asset. Ghana is Africa’s largest gold producer.", unit: "$", wk52: [1984.00, 2790.15] }
   ];
   const STOCKS = [
     { symbol: "GCB", price: 5.42, change: 0.12 },

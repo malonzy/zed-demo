@@ -80,6 +80,8 @@
       </div>
     </article>
 
+    ${adBlock("video")}
+
     <section class="section">
       <h2 class="section-title">More in ${esc(post.cat)}</h2>
       <div class="grid-2">${related.slice(0, 2).map((p) => relCard(p, "card--wide")).join("")}</div>

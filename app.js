@@ -76,6 +76,37 @@ function renderPolitics() {
 }
 
 document.querySelector("[data-banner-ad]").innerHTML = adBlock("banner");
+const railInner = document.querySelector("[data-ad-rail]");
+railInner.innerHTML = adRail();
+
+/* The rail is taller than the screen, so it follows the reader: scrolling down it pins its
+   bottom to the bottom of the window (showing the lower ads), scrolling up it pins its top. */
+(function stickyRail() {
+  const column = railInner.parentElement;
+  const GAP = 16;
+  const wide = window.matchMedia("(min-width: 1281px)");
+  let offset = 0, queued = false;
+
+  function update() {
+    queued = false;
+    if (!wide.matches) { railInner.style.transform = ""; offset = 0; return; }
+    const colTop = column.getBoundingClientRect().top + window.scrollY;
+    const maxOffset = Math.max(0, column.offsetHeight - railInner.offsetHeight);
+    const vh = window.innerHeight;
+    const upper = window.scrollY + GAP - colTop;                          // top may not fall below the window top
+    const lower = window.scrollY + vh - GAP - railInner.offsetHeight - colTop; // bottom may not rise above the window bottom
+    // Rail shorter than the window: just pin the top.
+    offset = lower > upper ? upper : Math.min(Math.max(offset, lower), upper);
+    offset = Math.min(Math.max(offset, 0), maxOffset);
+    railInner.style.transform = `translateY(${offset}px)`;
+  }
+  const queue = () => { if (!queued) { queued = true; requestAnimationFrame(update); } };
+
+  window.addEventListener("scroll", queue, { passive: true });
+  window.addEventListener("resize", queue);
+  wide.addEventListener("change", queue);
+  update();
+})();
 
 renderHero();
 renderLatest();
